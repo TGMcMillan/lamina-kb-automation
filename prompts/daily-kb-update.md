@@ -1,4 +1,5 @@
 You are helping maintain Lamina’s knowledge base.
+Here is the source content:
 
 Look in the /kb-source/ folder and identify any files that contain:
 - new product information
