@@ -1,0 +1,12 @@
+name: Daily Summary Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-message:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Show a test message
+        run: echo "GitHub Actions is working"
