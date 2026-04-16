@@ -7,9 +7,8 @@ jobs:
   test-message:
     runs-on: ubuntu-latest
 
-    steps:
+steps:
   - uses: actions/checkout@v4
-
   - name: Show file contents
     run: |
       echo "Reading kb-source..."
