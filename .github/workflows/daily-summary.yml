@@ -9,4 +9,6 @@ jobs:
 
     steps:
       - name: Show a test message
-        run: echo "GitHub Actions is working"
+       run: |
+  echo "Reading kb-source..."
+  cat kb-source/notice-management-update.md
