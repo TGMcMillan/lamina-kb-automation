@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Show a test message
-       run: |
-  echo "Reading kb-source..."
-  cat kb-source/notice-management-update.md
+      - name: Show file contents
+        run: |
+          echo "Reading kb-source..."
+          cat kb-source/notice-management-update.md
