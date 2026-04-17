@@ -1,4 +1,4 @@
-name: Daily Summary Test
+name: Summarize KB File
 
 on:
   workflow_dispatch:
@@ -7,17 +7,68 @@ permissions:
   contents: write
 
 jobs:
-  test-message:
+  summarize-file:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
         with:
           ref: ${{ github.ref_name }}
 
-      - name: Copy source file into summary file
+      - name: Create summary with OpenAI
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          summary=$(cat kb-source/notice-management-update.md)
-          echo "$summary" > kb-summaries/daily-summary.md
+          python3 <<'PY'
+          import json
+          import os
+          import urllib.request
+
+          source_path = "kb-source/notice-management-update.md"
+          output_path = "kb-summaries/daily-summary.md"
+
+          with open(source_path, "r", encoding="utf-8") as f:
+              source_text = f.read()
+
+          prompt = f"""Create a short plain-English summary of this file.
+
+          Include:
+          - Date
+          - Files reviewed
+          - Summary of changes
+          - Articles likely affected
+          - Open questions
+
+          File reviewed: {source_path}
+
+          Source content:
+          {source_text}
+          """
+
+          payload = {
+              "model": "gpt-5",
+              "messages": [
+                  {"role": "user", "content": prompt}
+              ]
+          }
+
+          request = urllib.request.Request(
+              "https://api.openai.com/v1/chat/completions",
+              data=json.dumps(payload).encode("utf-8"),
+              headers={
+                  "Content-Type": "application/json",
+                  "Authorization": f"Bearer {os.environ['OPENAI_API_KEY']}"
+              },
+              method="POST"
+          )
+
+          with urllib.request.urlopen(request) as response:
+              result = json.loads(response.read().decode("utf-8"))
+
+          summary_text = result["choices"][0]["message"]["content"].strip()
+
+          with open(output_path, "w", encoding="utf-8") as f:
+              f.write(summary_text + "\n")
+          PY
 
       - name: Save updated summary file back to GitHub
         run: |
