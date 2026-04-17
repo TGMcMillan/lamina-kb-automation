@@ -8,7 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Show file contents
+
+      - name: Copy source file into summary file
         run: |
-          echo "Reading kb-source..."
-          cat kb-source/notice-management-update.md
+          summary=$(cat kb-source/notice-management-update.md)
+          echo "$summary" > kb-summaries/daily-summary.md
+
+      - name: Save updated summary file back to GitHub
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add kb-summaries/daily-summary.md
+          git commit -m "Update daily summary" || echo "No changes to commit"
+          git push
