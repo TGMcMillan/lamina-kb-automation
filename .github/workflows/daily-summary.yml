@@ -29,9 +29,9 @@ jobs:
           with open(source_path, "r", encoding="utf-8") as f:
               source_text = f.read()
 
-          prompt = f"""Create a short plain-English summary of this file.
+          prompt = f"""Create a short plain-English markdown summary of this file.
 
-          Include:
+          Include these sections:
           - Date
           - Files reviewed
           - Summary of changes
@@ -46,13 +46,11 @@ jobs:
 
           payload = {
               "model": "gpt-5",
-              "messages": [
-                  {"role": "user", "content": prompt}
-              ]
+              "input": prompt
           }
 
           request = urllib.request.Request(
-              "https://api.openai.com/v1/chat/completions",
+              "https://api.openai.com/v1/responses",
               data=json.dumps(payload).encode("utf-8"),
               headers={
                   "Content-Type": "application/json",
@@ -64,7 +62,7 @@ jobs:
           with urllib.request.urlopen(request) as response:
               result = json.loads(response.read().decode("utf-8"))
 
-          summary_text = result["choices"][0]["message"]["content"].strip()
+          summary_text = result["output"][0]["content"][0]["text"].strip()
 
           with open(output_path, "w", encoding="utf-8") as f:
               f.write(summary_text + "\n")
