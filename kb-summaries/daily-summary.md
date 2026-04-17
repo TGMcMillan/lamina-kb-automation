@@ -1,19 +1,11 @@
-Date: April
+Notice Management Update – April
 
-Files reviewed:
-- notice-management-update.md
+We introduced a new classification type for incoming notices called “Rate Adjustment Notice.”
 
-Summary of changes:
-- Added a new notice classification type: “Rate Adjustment Notice”
-- Reduced manual categorization by attempting automatic classification based on key phrases in email content
-- Fixed an issue where participant assignment was not saving correctly after reassignment
+Previously, users had to manually categorize these notices under generic types.
 
-Articles likely affected:
-- Notice classification
-- Notice processing workflow
-- Participant assignment
+The system now attempts to automatically classify these notices based on key phrases in the email content.
 
-Open questions:
-- Which specific fee types are failing to extract correctly?
-- How often is the fee extraction issue occurring?
-- Does the fee extraction issue affect all notice types or only some?
+Additionally, we fixed an issue where participant assignment was not saving correctly when reassigned.
+
+There is still a known issue where some notices fail to extract fee data correctly. This is under investigation.
